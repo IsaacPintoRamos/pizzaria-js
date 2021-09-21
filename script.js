@@ -19,7 +19,7 @@ pizzaJson.map((item, index)=>{ // ITEM ESTA RECEBENDO AS PIZZAS, E O INDEX ESTA 
     // IMAGEM PIZZA
     pizzaItem.querySelector('.pizza-item--img img').src = item.img;
     // PREÇO PIZZA
-    pizzaItem.querySelector('.pizza-item--price').innerHTML = `R$ ${item.price.toFixed(2)}`;
+    pizzaItem.querySelector('.pizza-item--price').innerHTML = `R$ ${item.price[2].toFixed(2)}`;
     // NOME PIZZA
     pizzaItem.querySelector('.pizza-item--name').innerHTML = item.name;
     // DESC PIZZA
@@ -48,12 +48,18 @@ pizzaJson.map((item, index)=>{ // ITEM ESTA RECEBENDO AS PIZZAS, E O INDEX ESTA 
             };
             sizeItem.querySelector('span').innerHTML = pizzaJson[key].sizes[sizeIndex]; // TAMANHO PIZZA NO MODAL
         });
-        c('.pizzaInfo--qt').innerHTML = modalQt;
         
-
-        c('.pizzaInfo--pricearea .pizzaInfo--actualPrice').innerHTML = `R$ ${pizzaJson[key].price.toFixed(2)}`; // PREÇO PIZZA NO MODAL
+        cs('.pizzaInfo--size').forEach((price, priceItem)=>{
+            price.addEventListener('click', ()=>{
+                c('.pizzaInfo--actualPrice').innerHTML = `R$ ${pizzaJson[key].price[priceItem].toFixed(2)}`;
+            })
+        });
+        
+        // PREÇO PRE SELECIONADO
+        c('.pizzaInfo--pricearea .pizzaInfo--actualPrice').innerHTML = `R$ ${pizzaJson[key].price[2].toFixed(2)}`; // PREÇO PIZZA NO MODAL
 
         // ABRIR O MODAL COM TRANSIÇÃO
+        c('.pizzaInfo--qt').innerHTML = modalQt;
         c('.pizzaWindowArea').style.opacity = 0;
         c('.pizzaWindowArea').style.display = 'Flex'; //MOSTRA O MODAL
         setTimeout(function(){
@@ -145,9 +151,9 @@ function updateCart() {
 
 
         for(let i in cart) {
-            let pizzaItem = pizzaJson.find((item)=>{
-                return item.id == cart[i].id; // VAI BUSCAR O ID DO ITEM EM PIZZAJSON  
-            });
+            let pizzaItem = pizzaJson.find((item)=>item.id == cart[i].id);
+                subTotal += pizzaItem.price[cart[i].size] * cart[i].qtd;
+           
 
             // MOSTRANDO O TAMANHO DA PIZZA NO CARRINHO
             let pizzaSizeName;
@@ -165,7 +171,7 @@ function updateCart() {
             // ESTA RECENDO O PIZZASIZENAME
             let pizzaName = `${pizzaItem.name} ${pizzaSizeName}`;
 
-            subTotal += pizzaItem.price * cart[i].qtd;
+            
 
             
             // CLONANDO A DIV CART--ITEM
